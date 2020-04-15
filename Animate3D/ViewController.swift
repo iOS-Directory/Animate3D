@@ -33,13 +33,19 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         //get the image from the assets folder, inGroupNamed = folder name, bundle = location
         if let imageToTrack = ARReferenceImage.referenceImages(inGroupNamed: "AR Resources", bundle: Bundle.main) {
+            
+            //Set the image to be track by ARImageTrackingConfiguration
              configuration.trackingImages = imageToTrack
-        }
-        //The max ammount of images to track from the current images in the folder, we only have one at the moment
-        configuration.maximumNumberOfTrackedImages = 1
+            
+            //The max ammount of images to track from the current images in the folder, we only have one at the moment
+             configuration.maximumNumberOfTrackedImages = 1
 
-        // Run the view's session
-        sceneView.session.run(configuration)
+             // Run the view's session
+             sceneView.session.run(configuration)
+             
+             print("Image found in folder.")
+        }
+ 
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -51,27 +57,34 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
     // MARK: - ARSCNViewDelegate
     
-/*
-    // Override to create and configure nodes for anchors added to the view's session.
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
+        
         let node = SCNNode()
-     
+        
+        if let imageAnchor = anchor as? ARImageAnchor {
+            
+            // instead of hardcoding size we use the physical size detected by arKit
+            let plane = SCNPlane(
+                width: imageAnchor.referenceImage.physicalSize.width,
+                height: imageAnchor.referenceImage.physicalSize.height)
+            
+            //Make plane 1/2 as transparent alpha: 0.5
+            plane.firstMaterial?.diffuse.contents = UIColor(white: 1.0, alpha: 0.5)
+            
+            let planeNode = SCNNode(geometry: plane)
+            
+            //Rotate plane where the 3d image will be display 90 degrees
+            planeNode.eulerAngles.x = -.pi / 2
+            
+            node.addChildNode(planeNode)
+        }
+        
+        
+        
+        
         return node
     }
-*/
     
-    func session(_ session: ARSession, didFailWithError error: Error) {
-        // Present an error message to the user
-        
-    }
     
-    func sessionWasInterrupted(_ session: ARSession) {
-        // Inform the user that the session has been interrupted, for example, by presenting an overlay
-        
-    }
     
-    func sessionInterruptionEnded(_ session: ARSession) {
-        // Reset tracking and/or remove existing anchors if consistent tracking is required
-        
-    }
 }
