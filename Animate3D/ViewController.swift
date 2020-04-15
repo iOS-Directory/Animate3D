@@ -23,6 +23,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // Show statistics such as fps and timing information
         sceneView.showsStatistics = true
         
+        sceneView.automaticallyUpdatesLighting = true
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -69,7 +71,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 height: imageAnchor.referenceImage.physicalSize.height)
             
             //Make plane 1/2 as transparent alpha: 0.5
-            plane.firstMaterial?.diffuse.contents = UIColor(white: 1.0, alpha: 0.5)
+            plane.firstMaterial?.diffuse.contents = UIColor(white: 1.0, alpha: 0.3)
             
             let planeNode = SCNNode(geometry: plane)
             
@@ -77,11 +79,17 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             planeNode.eulerAngles.x = -.pi / 2
             
             node.addChildNode(planeNode)
+            
+            if let spidermanScene = SCNScene(named: "art.scnassets/spiderman.scn") {
+                if let spiderNode = spidermanScene.rootNode.childNodes.first {
+                    
+                    //Rotate spiderman where the 3d image will be display on top of the plane
+                    spiderNode.eulerAngles.x = .pi / 2
+                    
+                    planeNode.addChildNode(spiderNode)
+                }
+            }
         }
-        
-        
-        
-        
         return node
     }
     
