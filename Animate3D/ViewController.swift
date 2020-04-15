@@ -40,12 +40,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
              configuration.trackingImages = imageToTrack
             
             //The max ammount of images to track from the current images in the folder, we only have one at the moment
-             configuration.maximumNumberOfTrackedImages = 1
+             configuration.maximumNumberOfTrackedImages = 3
 
              // Run the view's session
              sceneView.session.run(configuration)
-             
-             print("Image found in folder.")
         }
  
     }
@@ -80,15 +78,43 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             
             node.addChildNode(planeNode)
             
-            if let spidermanScene = SCNScene(named: "art.scnassets/spiderman.scn") {
-                if let spiderNode = spidermanScene.rootNode.childNodes.first {
-                    
-                    //Rotate spiderman where the 3d image will be display on top of the plane
-                    spiderNode.eulerAngles.x = .pi / 2
-                    
-                    planeNode.addChildNode(spiderNode)
+            //Get the name of the detected image to interpolate and match it with the 3d character
+            if imageAnchor.referenceImage.name == "spiderman" {
+                if let characterScene = SCNScene(named: "art.scnassets/spiderman.scn") {
+                    if let spiderNode = characterScene.rootNode.childNodes.first {
+                        
+                        //Rotate spiderman where the 3d image will be display on top of the plane
+                        spiderNode.eulerAngles.x = .pi / 2
+                        
+                        planeNode.addChildNode(spiderNode)
+                    }
                 }
             }
+            
+            if imageAnchor.referenceImage.name == "paw1"{
+                if let characterScene = SCNScene(named: "art.scnassets/paw1.scn") {
+                    if let spiderNode = characterScene.rootNode.childNodes.first {
+                        
+                        //Rotate spiderman where the 3d image will be display on top of the plane
+                        spiderNode.eulerAngles.x = .pi / 2
+                        
+                        planeNode.addChildNode(spiderNode)
+                    }
+                }
+            }
+            
+            if imageAnchor.referenceImage.name == "paw2"{
+                if let characterScene = SCNScene(named: "art.scnassets/paw2.scn") {
+                    if let spiderNode = characterScene.rootNode.childNodes.first {
+                        
+                        //Rotate spiderman where the 3d image will be display on top of the plane
+                        spiderNode.eulerAngles.x = .pi / 2
+                        
+                        planeNode.addChildNode(spiderNode)
+                    }
+                }
+            }
+            
         }
         return node
     }
